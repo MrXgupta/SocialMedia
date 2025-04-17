@@ -1,11 +1,27 @@
 const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors')
+require('dotenv').config()
+
+const connectDB = require('./config/db')
+const authRoutes = require('./routes/authRoutes')
+const getUserDetails =  require('./routes/userDetailsRoutes')
+const handlePost =  require('./routes/postRoutes')
+
 const app = express()
-const port = 3000
+const PORT = process.env.PORT || 5000
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+app.use(cors())
+app.use(express.json())
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+
+connectDB()
+
+
+app.use('/api/auth', authRoutes)
+app.use('/api/user', getUserDetails)
+app.use('/api/post' , handlePost)
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`)
 })
